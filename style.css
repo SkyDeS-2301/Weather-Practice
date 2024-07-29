@@ -107,7 +107,7 @@ body {
     margin-bottom: 7px;
 }
 
-.main-info__city {
+.main-info__country {
     font-size: 24px;
     font-style: italic;
 }
@@ -120,8 +120,8 @@ body {
     text-align: center;
 }
 
-.content__icon-main {
-    width: 100px;
+.main-info__icon {
+    width: 200px;
 }
 
 .main-info {
@@ -138,7 +138,7 @@ body {
 .secondary-info > div {
     font-size: 26px;
 }
-.secondary-info__city {
+.secondary-info__country {
 }
 
 .secondary-info__degree {
@@ -156,7 +156,8 @@ body {
     gap: 15px;
 }
 
-.switch-pages__btn {
+.switch-pages__btn,
+.add-country-btn {
     background: transparent;
     border: 2px solid black;
     border-radius: 15px;
@@ -164,8 +165,15 @@ body {
     cursor: pointer;
     padding: 5px 10px;
 }
+.switch-pages__btn--active {
+    border: 3px solid lime;
+}
 
-.city-history {
+.add-country-btn--active {
+    border: 3px solid red;
+}
+
+.country-history {
     padding: 10px;
     flex-basis: 250px;
     max-width: 250px;
@@ -173,7 +181,7 @@ body {
     border: 2px solid black;
 }
 
-.city {
+.country {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -186,7 +194,7 @@ body {
 
     margin-bottom: 10px;
 }
-.city-history__title {
+.country-history__title {
     font-size: 24px;
     font-weight: 500;
     text-align: center;
@@ -195,12 +203,12 @@ body {
     padding-bottom: 5px;
     margin-bottom: 20px;
 }
-.city__name {
+.country_name {
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.city__delete {
+.country__delete {
     background: transparent;
     padding: 5px;
     border: 2px solid black;
