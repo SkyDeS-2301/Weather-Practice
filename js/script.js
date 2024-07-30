@@ -15,12 +15,35 @@ const secondaryCountryDegrees = document.querySelector( '.secondary-info__degree
 const secondaryCountryHumidity = document.querySelector( '.secondary-info__humidity' );
 const secondaryCountryWind = document.querySelector( '.secondary-info__wind' );
 
-// Start main logic
-inputSearch.addEventListener('keydown', (e) => {
-  if (e.keyCode === 13) {
+// Start 
+
+// Tabs logic
+const tabsContent = document.querySelectorAll( '.content' );
+const tabsButton = document.querySelectorAll( '.switch-pages__btn' );
+tabsButton.forEach( button => button.addEventListener( 'click', showTab ) );
+
+function showTab( e ) {
+  const t = e.target;
+  tabsButton.forEach( ( button, index ) => {
+    if ( button === t ) {
+      hideTabs()
+      t.classList.add( 'switch-pages__btn--active' );
+      tabsContent[ index ].classList.remove( 'none' )
+    }
+  } )
+}
+
+function hideTabs() {
+  tabsButton.forEach( button => button.classList.remove( 'switch-pages__btn--active' ) );
+  tabsContent.forEach( tab => tab.classList.add( 'none' ) );
+}
+
+// Work with API
+inputSearch.addEventListener( 'keydown', ( e ) => {
+  if ( e.keyCode === 13 ) {
     getWeatherData()
   }
-})
+} )
 buttonSearch.addEventListener( 'click', getWeatherData );
 
 async function getWeatherData() {
@@ -32,11 +55,11 @@ async function getWeatherData() {
   if ( !data ) return
   console.log( data )
   mainCountryName.textContent = data.name;
-  mainCountryDegrees.textContent = Math.floor( data.main.temp - 273 ) + '°';
+  mainCountryDegrees.textContent = `${ Math.floor( data.main.temp - 273 ) }°`;
   mainCountryIcon.src = `${ URL_ICONS }${ data.weather[ 0 ].icon }@2x.png`;
 
-  secondaryCountryName.textContent = data.name;
-  secondaryCountryDegrees.textContent = Math.floor( data.main.temp - 273 ) + '°';
-  secondaryCountryHumidity.textContent = data.main.humidity;
-  secondaryCountryWind.textContent = data.wind.speed + 'm/s';
+  secondaryCountryName.textContent = `Location --- ${ data.name }`;
+  secondaryCountryDegrees.textContent = `Degrees --- ${ Math.floor( data.main.temp - 273 ) }°`;
+  secondaryCountryHumidity.textContent = `Humidity --- ${data.main.humidity} %`;
+  secondaryCountryWind.textContent = `Wind speed --- ${data.wind.speed} m/s`;
 }
