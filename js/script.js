@@ -15,16 +15,16 @@ const secondaryCountryDegrees = document.querySelector( '.secondary-info__degree
 const secondaryCountryHumidity = document.querySelector( '.secondary-info__humidity' );
 const secondaryCountryWind = document.querySelector( '.secondary-info__wind' );
 
-// Start 
+// Start
 
 // Tabs logic
 const tabsContent = document.querySelectorAll( '.content' );
-const tabsButton = document.querySelectorAll( '.switch-pages__btn' );
-tabsButton.forEach( button => button.addEventListener( 'click', showTab ) );
+const tabsButtons = document.querySelectorAll( '.switch-pages__btn' );
+tabsButtons.forEach( button => button.addEventListener( 'click', showTab ) );
 
 function showTab( e ) {
   const t = e.target;
-  tabsButton.forEach( ( button, index ) => {
+  tabsButtons.forEach( ( button, index ) => {
     if ( button === t ) {
       hideTabs()
       t.classList.add( 'switch-pages__btn--active' );
@@ -34,8 +34,36 @@ function showTab( e ) {
 }
 
 function hideTabs() {
-  tabsButton.forEach( button => button.classList.remove( 'switch-pages__btn--active' ) );
+  tabsButtons.forEach( button => button.classList.remove( 'switch-pages__btn--active' ) );
   tabsContent.forEach( tab => tab.classList.add( 'none' ) );
+}
+
+// Add location to history logic
+const countryHistoryPanel = document.querySelector( '.country-history' );
+const locationHistoryArray = [];
+showHistoryLocation()
+
+function showHistoryLocation() {
+  const locationElements = locationHistoryArray.map( loc => {
+    return `<div class="country"><span class="country__name">${ loc }</span>
+              <button class="country__delete">Del</button>
+            </div>`
+  } )
+
+  countryHistoryPanel.innerHTML = locationElements.join( '' );
+}
+
+const addLocationButton = document.querySelector( '.add-country-btn' );
+addLocationButton.addEventListener( 'click', addLocationToHistory );
+
+function addLocationToHistory() {
+  const locationValue = mainCountryName.textContent;
+  if ( locationValue === 'Location' ) return
+  debugger
+  if (!locationHistoryArray.includes(locationValue)) {
+    locationHistoryArray.push( locationValue );
+    showHistoryLocation();
+  }
 }
 
 // Work with API
@@ -47,7 +75,7 @@ inputSearch.addEventListener( 'keydown', ( e ) => {
 buttonSearch.addEventListener( 'click', getWeatherData );
 
 async function getWeatherData() {
-  const countryName = inputSearch.value.toLowerCase() || 'GERMANY';
+  const countryName = inputSearch.value.toLowerCase() || 'Italia';
 
   const path = `${ API }${ countryName }`;
   inputSearch.value = '';
@@ -60,6 +88,6 @@ async function getWeatherData() {
 
   secondaryCountryName.textContent = `Location --- ${ data.name }`;
   secondaryCountryDegrees.textContent = `Degrees --- ${ Math.floor( data.main.temp - 273 ) }°`;
-  secondaryCountryHumidity.textContent = `Humidity --- ${data.main.humidity} %`;
-  secondaryCountryWind.textContent = `Wind speed --- ${data.wind.speed} m/s`;
+  secondaryCountryHumidity.textContent = `Humidity --- ${ data.main.humidity } %`;
+  secondaryCountryWind.textContent = `Wind speed --- ${ data.wind.speed } m/s`;
 }
