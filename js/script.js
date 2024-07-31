@@ -49,7 +49,6 @@ function showHistoryLocation() {
               <button class="country__delete">Del</button>
             </div>`
   } )
-
   countryHistoryPanel.innerHTML = locationElements.join( '' );
 }
 
@@ -58,9 +57,13 @@ addLocationButton.addEventListener( 'click', addLocationToHistory );
 
 function addLocationToHistory() {
   const locationValue = mainCountryName.textContent;
-  if ( locationValue === 'Location' ) return
-  debugger
-  if (!locationHistoryArray.includes(locationValue)) {
+  if ( locationValue === 'Location' ) return;
+  if (locationHistoryArray.includes(locationValue)) {
+    addLocationButton.classList.remove('switch-pages__btn--active');
+    locationHistoryArray.splice(locationHistoryArray.indexOf(locationValue), 1)
+    showHistoryLocation();
+  } else {
+    addLocationButton.classList.add('switch-pages__btn--active');
     locationHistoryArray.push( locationValue );
     showHistoryLocation();
   }
@@ -90,4 +93,10 @@ async function getWeatherData() {
   secondaryCountryDegrees.textContent = `Degrees --- ${ Math.floor( data.main.temp - 273 ) }°`;
   secondaryCountryHumidity.textContent = `Humidity --- ${ data.main.humidity } %`;
   secondaryCountryWind.textContent = `Wind speed --- ${ data.wind.speed } m/s`;
+
+  if (locationHistoryArray.includes(mainCountryName.textContent)) {
+    addLocationButton.classList.add('switch-pages__btn--active');
+  } else {
+    addLocationButton.classList.remove('switch-pages__btn--active');
+  }
 }
