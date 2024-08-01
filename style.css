@@ -194,9 +194,10 @@ body {
 
     margin-bottom: 10px;
 }
-.country_name {
+.country__name {
     overflow: hidden;
     text-overflow: ellipsis;
+    user-select: none;
 }
 
 .country__delete {

@@ -40,7 +40,7 @@ function hideTabs() {
 
 // Add location to history logic
 const countryHistoryPanel = document.querySelector( '.country-history' );
-const locationHistoryArray = [];
+const locationHistoryArray = [ 'Italy', 'Spain', 'Germany' ];
 showHistoryLocation()
 
 function showHistoryLocation() {
@@ -58,27 +58,54 @@ addLocationButton.addEventListener( 'click', addLocationToHistory );
 function addLocationToHistory() {
   const locationValue = mainCountryName.textContent;
   if ( locationValue === 'Location' ) return;
-  if (locationHistoryArray.includes(locationValue)) {
-    addLocationButton.classList.remove('switch-pages__btn--active');
-    locationHistoryArray.splice(locationHistoryArray.indexOf(locationValue), 1)
+  if ( locationHistoryArray.includes( locationValue ) ) {
+    addLocationButton.classList.remove( 'switch-pages__btn--active' );
+    locationHistoryArray.splice( locationHistoryArray.indexOf( locationValue ), 1 )
     showHistoryLocation();
   } else {
-    addLocationButton.classList.add('switch-pages__btn--active');
+    addLocationButton.classList.add( 'switch-pages__btn--active' );
     locationHistoryArray.push( locationValue );
     showHistoryLocation();
   }
 }
 
+// Delete location from history
+countryHistoryPanel.addEventListener( 'click', deleteLocation);
+function deleteLocation (e) {
+  const t = e.target;
+  if ( t.classList.contains( 'country__delete') ) {
+    const elem = t.parentElement.querySelector('.country__name').textContent;
+    locationHistoryArray.splice(locationHistoryArray.indexOf(elem), 1);
+    showHistoryLocation()
+    if (mainCountryName.textContent === elem) {
+      addLocationButton.classList.remove( 'switch-pages__btn--active' );
+    }
+  }
+}
+
+countryHistoryPanel.addEventListener( 'click', getLocationInformation);
+
+function getLocationInformation( e ) {
+  const t = e.target;
+  if ( t.classList.contains( 'country') || t.classList.contains( 'country__name') ) {
+    const elem = t.querySelector('.country__name')?.textContent || t.textContent;
+    getWeatherData(elem);
+  }
+}
+
+
 // Work with API
 inputSearch.addEventListener( 'keydown', ( e ) => {
   if ( e.keyCode === 13 ) {
-    getWeatherData()
+    getWeatherData(inputSearch.value);
   }
 } )
-buttonSearch.addEventListener( 'click', getWeatherData );
+buttonSearch.addEventListener( 'click', () => getWeatherData(inputSearch.value) );
 
-async function getWeatherData() {
-  const countryName = inputSearch.value.toLowerCase() || 'Italia';
+async function getWeatherData(countryName) {
+  if (countryName === '') {
+    countryName = 'Italy'
+  }
 
   const path = `${ API }${ countryName }`;
   inputSearch.value = '';
@@ -94,9 +121,9 @@ async function getWeatherData() {
   secondaryCountryHumidity.textContent = `Humidity --- ${ data.main.humidity } %`;
   secondaryCountryWind.textContent = `Wind speed --- ${ data.wind.speed } m/s`;
 
-  if (locationHistoryArray.includes(mainCountryName.textContent)) {
-    addLocationButton.classList.add('switch-pages__btn--active');
+  if ( locationHistoryArray.includes( mainCountryName.textContent ) ) {
+    addLocationButton.classList.add( 'switch-pages__btn--active' );
   } else {
-    addLocationButton.classList.remove('switch-pages__btn--active');
+    addLocationButton.classList.remove( 'switch-pages__btn--active' );
   }
 }
